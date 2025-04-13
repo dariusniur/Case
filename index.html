@@ -344,7 +344,18 @@
                     body: JSON.stringify(formData)
                 });
 
-                const data = await response.json();
+                // Log the response for debugging
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    throw new Error('Invalid response from server');
+                }
 
                 if (!response.ok) {
                     throw new Error(data.error || 'Server error occurred');
@@ -352,6 +363,10 @@
 
                 if (data.error) {
                     throw new Error(data.error);
+                }
+
+                if (!data.id) {
+                    throw new Error('No session ID received');
                 }
 
                 // Initialize Stripe with publishable key

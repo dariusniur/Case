@@ -8,16 +8,15 @@ $dotenv->load();
 // Set Stripe API key from environment variable
 \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
+// Set content type to JSON
 header('Content-Type: application/json');
 
-// Get form data
-$input = file_get_contents('php://input');
-$formData = json_decode($input, true);
-
-// Log the received data for debugging
-error_log("Received form data: " . print_r($formData, true));
-
 try {
+    // Get JSON input
+    $input = file_get_contents('php://input');
+    $formData = json_decode($input, true);
+
+    // Validate input
     if (!$formData) {
         throw new Exception('Invalid form data received');
     }
@@ -48,9 +47,13 @@ try {
         ],
     ]);
 
+    // Return the session ID
     echo json_encode(['id' => $checkout_session->id]);
 } catch (Exception $e) {
+    // Log the error
     error_log("Stripe error: " . $e->getMessage());
+    
+    // Return error response
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 } 
