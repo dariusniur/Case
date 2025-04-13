@@ -327,11 +327,14 @@
                 address: document.getElementById('customerAddress').value,
                 phone: document.getElementById('customerPhone').value,
                 phone_model: document.getElementById('phoneModel').value,
-                delivery_method: document.querySelector('.delivery-option.border-pink-500').dataset.method,
-                image: document.querySelector('input[type="file"]').files[0]
+                delivery_method: document.querySelector('.delivery-option.border-pink-500').dataset.method
             };
 
             try {
+                // Show loading state
+                submitButton.disabled = true;
+                submitButton.textContent = 'Kraunama...';
+
                 // Create checkout session
                 const response = await fetch('create-checkout-session.php', {
                     method: 'POST',
@@ -341,10 +344,14 @@
                     body: JSON.stringify(formData)
                 });
 
-                const session = await response.json();
+                const data = await response.json();
 
-                if (session.error) {
-                    throw new Error(session.error);
+                if (!response.ok) {
+                    throw new Error(data.error || 'Server error occurred');
+                }
+
+                if (data.error) {
+                    throw new Error(data.error);
                 }
 
                 // Initialize Stripe with publishable key
@@ -352,7 +359,7 @@
                 
                 // Redirect to Stripe Checkout
                 const result = await stripe.redirectToCheckout({
-                    sessionId: session.id
+                    sessionId: data.id
                 });
 
                 if (result.error) {
@@ -360,7 +367,9 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Įvyko klaida. Bandykite dar kartą.');
+                alert('Įvyko klaida: ' + error.message);
+                submitButton.disabled = false;
+                submitButton.textContent = 'Užsakyti';
             }
         });
 
