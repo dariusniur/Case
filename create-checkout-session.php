@@ -48,10 +48,6 @@ try {
 
     error_log("Form data decoded successfully: " . print_r($formData, true));
 
-    // Get the current domain
-    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
-    $domain = $protocol . $_SERVER['HTTP_HOST'];
-
     // Create a Stripe checkout session
     $checkout_session = \Stripe\Checkout\Session::create([
         'payment_method_types' => ['card'],
@@ -67,8 +63,8 @@ try {
             'quantity' => 1,
         ]],
         'mode' => 'payment',
-        'success_url' => $domain . '/success.html',
-        'cancel_url' => $domain . '/cancel.html',
+        'success_url' => $_ENV['SITE_URL'] . '/success.html',
+        'cancel_url' => $_ENV['SITE_URL'] . '/cancel.html',
         'metadata' => [
             'phone_model' => $formData['phone_model'] ?? '',
             'delivery_method' => $formData['delivery_method'] ?? '',

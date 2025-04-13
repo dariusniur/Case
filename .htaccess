@@ -1,0 +1,30 @@
+# Protect .env file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect composer files
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
+<Files composer.lock>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect vendor directory
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^vendor/ - [F,L]
+</IfModule>
+
+# Set proper permissions
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Allow from all
+</IfModule> 
