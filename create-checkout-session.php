@@ -1,12 +1,35 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once 'vendor/autoload.php';
 
+// Log the start of the script
+error_log("Starting checkout session creation");
+
 // Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+try {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+    error_log("Environment variables loaded successfully");
+} catch (Exception $e) {
+    error_log("Error loading environment variables: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['error' => 'Configuration error']);
+    exit;
+}
 
 // Set Stripe API key from environment variable
-\Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+try {
+    \Stripe\Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+    error_log("Stripe API key set successfully");
+} catch (Exception $e) {
+    error_log("Error setting Stripe API key: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['error' => 'Stripe configuration error']);
+    exit;
+}
 
 // Set content type to JSON
 header('Content-Type: application/json');
@@ -14,12 +37,20 @@ header('Content-Type: application/json');
 try {
     // Get JSON input
     $input = file_get_contents('php://input');
+    error_log("Received input: " . $input);
+    
     $formData = json_decode($input, true);
 
     // Validate input
     if (!$formData) {
         throw new Exception('Invalid form data received');
     }
+
+    error_log("Form data decoded successfully: " . print_r($formData, true));
+
+    // Get the current domain
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+    $domain = $protocol . $_SERVER['HTTP_HOST'];
 
     // Create a Stripe checkout session
     $checkout_session = \Stripe\Checkout\Session::create([
@@ -36,8 +67,8 @@ try {
             'quantity' => 1,
         ]],
         'mode' => 'payment',
-        'success_url' => 'https://your-domain.com/success.html',
-        'cancel_url' => 'https://your-domain.com/cancel.html',
+        'success_url' => $domain . '/success.html',
+        'cancel_url' => $domain . '/cancel.html',
         'metadata' => [
             'phone_model' => $formData['phone_model'] ?? '',
             'delivery_method' => $formData['delivery_method'] ?? '',
@@ -47,8 +78,11 @@ try {
         ],
     ]);
 
+    error_log("Stripe session created successfully with ID: " . $checkout_session->id);
+
     // Return the session ID
     echo json_encode(['id' => $checkout_session->id]);
+    exit;
 } catch (Exception $e) {
     // Log the error
     error_log("Stripe error: " . $e->getMessage());
@@ -56,4 +90,5 @@ try {
     // Return error response
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
+    exit;
 } 

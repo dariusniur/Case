@@ -340,6 +340,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
@@ -354,7 +355,7 @@
                     data = JSON.parse(responseText);
                 } catch (parseError) {
                     console.error('JSON parse error:', parseError);
-                    throw new Error('Invalid response from server');
+                    throw new Error('Invalid response from server: ' + responseText);
                 }
 
                 if (!response.ok) {
