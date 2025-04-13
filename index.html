@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deklink - Pasidaryk savo iPhone dėklą</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .sticky-nav {
+            transition: all 0.3s ease;
+        }
+        .sticky-nav.scrolled {
+            @apply bg-white shadow-md;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="sticky-nav fixed top-0 left-0 right-0 z-50 bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-gray-900">Deklink</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-700 hover:text-pink-600">Apie mus</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-pink-600">Kaip veikia</a>
+                    <a href="#examples" class="text-gray-700 hover:text-pink-600">Pavyzdžiai</a>
+                    <a href="#faq" class="text-gray-700 hover:text-pink-600">DUK</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="#order-form" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors">
+                        Užsakyti
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center" data-aos="fade-up">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Padaryk telefoną savą</h1>
+                    <p class="text-xl text-gray-600 mb-8">Sukurk unikalų iPhone dėklą su savo nuotrauka</p>
+                    <a href="#order-form" class="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors">
+                        Pradėti užsakymą
+                    </a>
+                </div>
+                <div class="flex justify-center" data-aos="zoom-in">
+                    <img src="images/hero-case.png" alt="Phone Case Mockup" class="max-w-md w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">Kaip tai veikia?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-upload text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Įkelk nuotrauką</h3>
+                    <p class="text-gray-600">Pasirink savo mėgstamą nuotrauką</p>
+                </div>
+                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-mobile-alt text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Mes sukuriame dėklą</h3>
+                    <p class="text-gray-600">Pagaminsime jūsų unikalų dėklą</p>
+                </div>
+                <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Pristatome</h3>
+                    <p class="text-gray-600">Atsiųsime tiesiai į jūsų namus</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section id="examples" class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">Pavyzdžiai</h2>
+            <div class="swiper" data-aos="fade-up">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="images/1.png" alt="Example 1" class="rounded-xl shadow-md w-full">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/2.png" alt="Example 2" class="rounded-xl shadow-md w-full">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/3.png" alt="Example 3" class="rounded-xl shadow-md w-full">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="images/4.png" alt="Example 4" class="rounded-xl shadow-md w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section id="order-form" class="py-12 bg-white">
+        <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Užsakyti dėkliuką</h2>
+                <p class="text-gray-600">Pateik visą reikiamą informaciją ir užbaik užsakymą</p>
+            </div>
+            <form id="orderForm" class="space-y-4" data-aos="fade-up">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Vardas Pavardė</label>
+                    <input type="text" id="customerName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Adresas</label>
+                    <input type="text" id="customerAddress" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Telefono numeris</label>
+                    <input type="tel" id="customerPhone" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pristatymo būdas</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button type="button" class="delivery-option p-4 rounded-lg border hover:border-pink-500" data-method="Omniva">
+                            <i class="fas fa-box text-2xl mb-2"></i>
+                            <span class="text-sm">Omniva</span>
+                        </button>
+                        <button type="button" class="delivery-option p-4 rounded-lg border hover:border-pink-500" data-method="LT Express">
+                            <i class="fas fa-truck text-2xl mb-2"></i>
+                            <span class="text-sm">LT Express</span>
+                        </button>
+                        <button type="button" class="delivery-option p-4 rounded-lg border hover:border-pink-500" data-method="DPD">
+                            <i class="fas fa-box-open text-2xl mb-2"></i>
+                            <span class="text-sm">DPD</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Telefono modelis</label>
+                    <select id="phoneModel" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500">
+                        <option value="">Pasirinkite modelį</option>
+                        <option value="iphone-6s">iPhone 6s</option>
+                        <option value="iphone-7">iPhone 7</option>
+                        <option value="iphone-8">iPhone 8</option>
+                        <option value="iphone-x">iPhone X</option>
+                        <option value="iphone-11">iPhone 11</option>
+                        <option value="iphone-12">iPhone 12</option>
+                        <option value="iphone-13">iPhone 13</option>
+                        <option value="iphone-14">iPhone 14</option>
+                        <option value="iphone-15">iPhone 15</option>
+                        <option value="iphone-15-pro">iPhone 15 Pro</option>
+                        <option value="iphone-15-pro-max">iPhone 15 Pro Max</option>
+                    </select>
+                </div>
+
+                <div id="imageUploadContainer" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700">Nuotrauka</label>
+                    <input type="file" accept="image/*" required class="mt-1 block w-full">
+                </div>
+
+                <button type="submit" disabled class="w-full bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Užsakyti
+                </button>
+
+                <p class="text-xs text-gray-500 mt-2">
+                    Užsakydami sutinkate su mūsų 
+                    <button type="button" class="text-pink-600 underline" onclick="openTerms()">taisyklėmis ir sąlygomis</button>.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-12">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">Dažniausiai užduodami klausimai</h2>
+            <div class="space-y-4" data-aos="fade-up">
+                <div class="border rounded-lg">
+                    <button class="accordion-header w-full p-4 text-left font-medium hover:bg-gray-50">
+                        Kiek laiko užtrunka pristatymas?
+                    </button>
+                    <div class="accordion-content p-4 text-gray-600">
+                        Pristatymas paprastai užtrunka 2-3 darbo dienas nuo užsakymo patvirtinimo.
+                    </div>
+                </div>
+                <div class="border rounded-lg">
+                    <button class="accordion-header w-full p-4 text-left font-medium hover:bg-gray-50">
+                        Kokios nuotraukos formatas geriausiai tinka?
+                    </button>
+                    <div class="accordion-content p-4 text-gray-600">
+                        Rekomenduojame naudoti aukštos kokybės nuotraukas JPG arba PNG formatu, bent 3000x3000 pikselių.
+                    </div>
+                </div>
+                <div class="border rounded-lg">
+                    <button class="accordion-header w-full p-4 text-left font-medium hover:bg-gray-50">
+                        Ar galima grąžinti dėklą?
+                    </button>
+                    <div class="accordion-content p-4 text-gray-600">
+                        Taip, jei dėklas neatitinka jūsų lūkesčių, galite jį grąžinti per 14 dienų nuo gavimo.
+                    </div>
+                </div>
+                <div class="border rounded-lg">
+                    <button class="accordion-header w-full p-4 text-left font-medium hover:bg-gray-50">
+                        Ar dėklas apsaugo nuo smūgių?
+                    </button>
+                    <div class="accordion-content p-4 text-gray-600">
+                        Taip, mūsų dėklai yra pagaminti iš aukštos kokybės medžiagų, kurios apsaugo nuo smūgių ir įtrūkimų.
+                    </div>
+                </div>
+                <div class="border rounded-lg">
+                    <button class="accordion-header w-full p-4 text-left font-medium hover:bg-gray-50">
+                        Ar galima užsisakyti kelis dėklus?
+                    </button>
+                    <div class="accordion-content p-4 text-gray-600">
+                        Taip, galite užsisakyti bet kokį kiekį dėklų. Kiekvienam dėklui reikia atskiro užsakymo.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center space-x-8">
+                <a href="#about" class="hover:text-pink-500">Apie mus</a>
+                <a href="#" class="hover:text-pink-500" onclick="openTerms()">Taisyklės ir sąlygos</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Initialize Swiper
+        new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 16,
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 4,
+                }
+            }
+        });
+
+        // Sticky navigation
+        const nav = document.querySelector('.sticky-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Form validation and delivery option selection
+        const form = document.getElementById('orderForm');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const deliveryOptions = document.querySelectorAll('.delivery-option');
+        const imageUploadContainer = document.getElementById('imageUploadContainer');
+        const phoneModelSelect = form.querySelector('select');
+
+        phoneModelSelect.addEventListener('change', () => {
+            imageUploadContainer.classList.toggle('hidden', !phoneModelSelect.value);
+        });
+
+        deliveryOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                deliveryOptions.forEach(opt => opt.classList.remove('border-pink-500', 'bg-pink-50'));
+                option.classList.add('border-pink-500', 'bg-pink-50');
+            });
+        });
+
+        form.addEventListener('input', () => {
+            const allRequiredFilled = Array.from(form.querySelectorAll('[required]')).every(input => input.value);
+            const deliverySelected = Array.from(deliveryOptions).some(opt => opt.classList.contains('border-pink-500'));
+            submitButton.disabled = !(allRequiredFilled && deliverySelected);
+            if (!submitButton.disabled) {
+                submitButton.classList.add('animate-pulse');
+            } else {
+                submitButton.classList.remove('animate-pulse');
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('customerName').value,
+                address: document.getElementById('customerAddress').value,
+                phone: document.getElementById('customerPhone').value,
+                phone_model: document.getElementById('phoneModel').value,
+                delivery_method: document.querySelector('.delivery-option.border-pink-500').dataset.method,
+                image: document.querySelector('input[type="file"]').files[0]
+            };
+
+            try {
+                // Create checkout session
+                const response = await fetch('create-checkout-session.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const session = await response.json();
+
+                if (session.error) {
+                    throw new Error(session.error);
+                }
+
+                // Initialize Stripe with publishable key
+                const stripe = Stripe('pk_test_51RBKaXRX285KlLv8OE4ojlOLkun5KKtvx7VAg1iXK3NaSv2q40jrMV7wwqgORDhPfaPJ2w1XTCun5lGKrXAwWTWe00dvQ50F37');
+                
+                // Redirect to Stripe Checkout
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
+
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Įvyko klaida. Bandykite dar kartą.');
+            }
+        });
+
+        // FAQ Accordion
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        function openTerms() {
+            // Implement terms modal
+            alert('Terms and conditions modal will be implemented');
+        }
+    </script>
+</body>
+</html> 
